@@ -17,15 +17,15 @@ docker build -t <image-name> .
 ```
 ## Ejecutar contenedor
 ```bash
-docker run -d -p 8080:80 <image-name> # Mapea host:8080 a docker:80
+docker run -d -p 8080:80 <image-name>
 ```
 ## Ejecutar comando en contenedor
 ```bash
-docker exec -it <container-id> /bin/bash
+docker exec -it <container-id> <command>
 ```
 ## Ver logs del contenedor
 ```bash
-docker logs <container-id>               # Muestra los logs de un contenedor
+docker logs <container-id>
 ```
 ## Detalles de contenedor
 ```bash

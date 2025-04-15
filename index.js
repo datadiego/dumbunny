@@ -6,8 +6,9 @@ const colors = {
     //neon brutalist pallette
     orange: '#FF7000',
     gray: '#2A2A2A',
-    green: '#A6FF00',
+    green: '#A6FF80',
     dark: '#1A1A1A',
+    purple: '#A600FF',
 };
 
 //console.log("objeto cheats:", cheats);
@@ -32,23 +33,30 @@ const list = blessed.list({
     mouse: true, // Habilitar interacción con el ratón
     style: {
         selected: {
-            bg: colors.gray,
-            fg: 'white'
+            inverse: true,
+            fg: colors.purple,
+            bg: colors.green,
         },
-        border: { fg: 'red' },
+        border: { fg: colors.purple },
         fg: colors.orange,
-        //bg: colors.dark
+        bg: colors.dark
     }
 });
 
 // Agregar los comandos al listado
+const item = list.addItem("CAT".padEnd(9) + "DESC".padEnd(31) + "COMMAND");
+item.style.bg = colors.orange;
+item.style.fg = colors.dark;
 Object.keys(cheats).forEach(category => {
     cheats[category].commands.forEach(command => {
-        list.addItem(`${category.toUpperCase().padEnd(10)} ${command.title.padEnd(30)} ${command.command}`);
+        list.addItem(`${category.toUpperCase().padEnd(8)} ${command.title.padEnd(30)} ${command.command}`);
     });
-    list.addItem("-".repeat(300)); // Separador entre categorías
-});
+    list.addItem("");
 
+});
+list.setLabel(' Dumbunny 0.0.1 ');
+// selecciona el segundo elemento
+list.select(1);
 // Agregar la lista a la pantalla
 screen.append(list);
 
@@ -86,13 +94,21 @@ screen.key(['s'], () => {
     searchBox.on('submit', (value) => {
         const searchTerm = value.toLowerCase();
         list.clearItems(); // Limpia los elementos actuales de la lista
-
+        //calcula el tamaño máximo de la columna de descripción
+        let maxLength = 0;
+        Object.keys(cheats).forEach(category => {
+            cheats[category].commands.forEach(command => {
+                if (command.title.length > maxLength) {
+                    maxLength = command.title.length;
+                }
+            });
+        });
         // Filtra y agrega los elementos que coincidan con el término de búsqueda
         Object.keys(cheats).forEach(category => {
             cheats[category].commands.forEach(command => {
                 const commandText = `${category.toUpperCase()} ${command.title} ${command.command}`.toLowerCase();
                 if (commandText.includes(searchTerm)) {
-                    list.addItem(`${category.toUpperCase().padEnd(7)} ${command.title.padEnd(40)} ${command.command}`);
+                    list.addItem(`${category.toUpperCase().padEnd(7)} ${command.title.padEnd(maxLength)} ${command.command}`);
                 }
             });
         });
@@ -128,10 +144,15 @@ list.on('select', (item) => {
         },
         style: {
             fg: 'white',
-            bg: 'black',
+            bg: colors.purple,
             border: { fg: 'green' }
         }
     });
+    message.display(`Comando copiado: ${command}`, 3, () => {
+        message.destroy();
+        screen.render();
+    });
+    
 });
 
 // Hacer que la lista sea interactiva
