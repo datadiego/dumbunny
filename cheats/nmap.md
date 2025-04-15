@@ -1,6 +1,5 @@
 ---
 tags: ["nmap", "scan"]
-inputs: ["ip","ports"]
 ---
 # Nmap
 

@@ -2,8 +2,16 @@ import blessed from 'blessed';
 import cheats from "./utils/cheats.js";
 import clipboardy from 'clipboardy';
 
-console.log("objeto cheats:", cheats);
-console.log("ejemplo comando:", cheats.nmap.commands[0]);
+const colors = {
+    //neon brutalist pallette
+    orange: '#FF7000',
+    gray: '#2A2A2A',
+    green: '#A6FF00',
+    dark: '#1A1A1A',
+};
+
+//console.log("objeto cheats:", cheats);
+//console.log("ejemplo comando:", cheats.nmap.commands[0]);
 
 // Crear la pantalla
 const screen = blessed.screen({
@@ -24,19 +32,20 @@ const list = blessed.list({
     mouse: true, // Habilitar interacción con el ratón
     style: {
         selected: {
-            bg: 'blue',
+            bg: colors.gray,
             fg: 'white'
         },
         border: { fg: 'red' },
-        fg: 'white',
-        bg: 'black'
+        fg: colors.orange,
+        //bg: colors.dark
     }
 });
 
 // Agregar los comandos al listado
-Object.keys(cheats).forEach(category => { 
+Object.keys(cheats).forEach(category => {
     cheats[category].commands.forEach(command => {
-        list.addItem(`${category.toUpperCase().padEnd(6)} ${command.title.padEnd(20)} ${command.command}`);    });
+        list.addItem(`${category.toUpperCase().padEnd(7)} ${command.title.padEnd(40)} ${command.command}`);
+    });
 });
 
 // Agregar la lista a la pantalla
@@ -58,41 +67,38 @@ screen.key(['s'], () => {
         },
         style: {
             fg: 'white',
-            bg: 'black',
+            bg: colors.dark,
             border: { fg: 'blue' }
         },
-        inputOnFocus: true
+        inputOnFocus: true,
+        label: ' Search ',
+        keys: true,
+        mouse: true,
     });
 
     screen.append(searchBox);
     searchBox.focus();
 
-    // Filtrar en tiempo real mientras el usuario escribe
-    searchBox.on('keypress', () => {
-        const query = searchBox.getValue();
-        const filteredItems = [];
+
+
+
+    searchBox.on('submit', (value) => {
+        const searchTerm = value.toLowerCase();
+        list.clearItems(); // Limpia los elementos actuales de la lista
+
+        // Filtra y agrega los elementos que coincidan con el término de búsqueda
         Object.keys(cheats).forEach(category => {
             cheats[category].commands.forEach(command => {
-                if (
-                    category.includes(query) ||
-                    command.title.includes(query) ||
-                    command.command.includes(query)
-                ) {
-                    filteredItems.push(`${category.toUpperCase().padEnd(6)} ${command.title.padEnd(20)} ${command.command}`);
+                const commandText = `${category.toUpperCase()} ${command.title} ${command.command}`.toLowerCase();
+                if (commandText.includes(searchTerm)) {
+                    list.addItem(`${category.toUpperCase().padEnd(7)} ${command.title.padEnd(40)} ${command.command}`);
                 }
             });
         });
 
-        list.clearItems();
-        filteredItems.forEach(item => list.addItem(item));
-        screen.render();
-    });
-
-    // Salir del menú de búsqueda al pulsar Enter
-    searchBox.on('submit', () => {
-        screen.remove(searchBox);
-        list.focus();
-        screen.render();
+        screen.remove(searchBox); // Elimina el cuadro de búsqueda
+        list.focus(); // Devuelve el foco a la lista
+        screen.render(); // Renderiza la pantalla
     });
 
     searchBox.on('cancel', () => {
@@ -126,13 +132,6 @@ list.on('select', (item) => {
         }
     });
 });
-
-
-
-
-
-
-
 
 // Hacer que la lista sea interactiva
 list.focus();
