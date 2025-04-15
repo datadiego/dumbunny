@@ -15,11 +15,11 @@ crunch 4 5 gato perro pajaro
 ```bash
 crunch 4 4 -t @@@%
 ```
-## Combinaciones de 5 digitos con numeros
+## Combinaciones de 5 numeros
 ```bash
 crunch 5 5 0123456789
 ```
-## Combinaciones de 5 digitos con letras
+## Combinaciones de 5 letras
 ```bash
 crunch 5 5 abcdefghijklmnopqrstuvwxyz -o resultado.txt
 ```

@@ -44,8 +44,9 @@ const list = blessed.list({
 // Agregar los comandos al listado
 Object.keys(cheats).forEach(category => {
     cheats[category].commands.forEach(command => {
-        list.addItem(`${category.toUpperCase().padEnd(7)} ${command.title.padEnd(40)} ${command.command}`);
+        list.addItem(`${category.toUpperCase().padEnd(10)} ${command.title.padEnd(30)} ${command.command}`);
     });
+    list.addItem("-".repeat(300)); // Separador entre categorías
 });
 
 // Agregar la lista a la pantalla
