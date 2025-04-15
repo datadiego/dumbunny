@@ -1,6 +1,6 @@
-const blessed = require('blessed');
-const cheats = require("./utils/cheats");
-const clipboardy = require('clipboardy');
+import blessed from 'blessed';
+import cheats from "./utils/cheats.js";
+import clipboardy from 'clipboardy';
 
 console.log("objeto cheats:", cheats);
 console.log("ejemplo comando:", cheats.nmap.commands[0]);

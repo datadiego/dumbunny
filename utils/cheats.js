@@ -1,5 +1,5 @@
-const fs = require('fs');
-const matter = require('gray-matter');
+import fs from 'fs';
+import matter from 'gray-matter';
 
 function parseMD(path){
     const markdownContent = fs.readFileSync(path, 'utf8');
@@ -47,4 +47,5 @@ function prepare(){
 
 const cheats = prepare()
 
-module.exports = cheats;
+//export cheats
+export default cheats;
